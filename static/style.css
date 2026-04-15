@@ -1,0 +1,414 @@
+:root {
+    --bg-main: #090c10;
+    --bg-panel: rgba(13, 17, 23, 0.85);
+    --border: rgba(48, 54, 61, 0.8);
+    --text-main: #e6edf3;
+    --text-dim: #8b949e;
+    --accent: #238636;
+    --accent-hover: #2ea043;
+    --danger: #f85149;
+    --font-sans: 'Inter', -apple-system, sans-serif;
+    --font-mono: 'JetBrains+Mono', monospace;
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    overflow: hidden;
+}
+
+.app-container {
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+}
+
+#map-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+/* Sidebar Glassmorphism */
+.sidebar {
+    width: 340px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    box-sizing: border-box;
+    z-index: 1100;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    bottom: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+.sidebar.collapsed {
+    transform: translateX(-380px);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Header Section */
+.sidebar-header {
+    padding: 24px 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.brand h1 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: -0.5px;
+}
+
+.brand h1 span {
+    color: var(--accent);
+    font-size: 0.8rem;
+    background: rgba(35, 134, 54, 0.15);
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 4px;
+}
+
+.status-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #3fb950;
+    margin-top: 8px;
+}
+
+.status-tag::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #3fb950;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #3fb950;
+}
+
+/* Sections */
+.sidebar-content {
+    padding: 0 20px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.group-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    margin: 24px 0 12px 0;
+}
+
+.sub-label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 10px;
+    display: block;
+}
+
+/* Inputs & Buttons */
+.input-row {
+    display: flex;
+    gap: 8px;
+}
+
+input[type="text"], select {
+    background: #010409;
+    border: 1px solid var(--border);
+    color: white;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    transition: border-color 0.2s;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+button {
+    font-family: var(--font-sans);
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.primary-btn {
+    width: 100%;
+    padding: 12px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    margin-top: 12px;
+}
+
+.primary-btn:hover { background: var(--accent-hover); transform: translateY(-1px); }
+
+.secondary-btn {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: white;
+    margin-top: 10px;
+}
+
+/* Hazard List */
+.hazard-panel {
+    margin: 24px 0;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    border: 1px solid var(--border);
+}
+
+.panel-header {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 10px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.hazard-item {
+    border-bottom: 1px solid var(--border);
+    padding: 12px;
+    transition: background 0.2s;
+}
+
+.hazard-item:last-child { border: none; }
+.hazard-item:hover { background: rgba(255, 255, 255, 0.05); }
+
+/* Range Slider */
+.range-container {
+    padding: 10px 0;
+}
+
+.range-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+}
+
+input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent);
+}
+
+/* Legend */
+.radar-legend {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    background: var(--bg-panel);
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    width: 200px;
+}
+
+.legend-title { font-size: 0.7rem; font-weight: 700; margin-bottom: 8px; }
+
+.legend-bar {
+    height: 12px;
+    border-radius: 4px;
+    background: linear-gradient(to right, #00ECEC, #01A000, #E70000, #FF00FF);
+}
+
+.legend-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.65rem;
+    margin-top: 4px;
+    color: var(--text-dim);
+}
+
+/* Footer */
+.sidebar-footer {
+    padding: 20px;
+    background: rgba(0,0,0,0.2);
+    border-top: 1px solid var(--border);
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    margin-bottom: 4px;
+}
+
+.info-row .label { color: var(--text-dim); }
+
+/* Toggle Button */
+.ui-toggle {
+    position: absolute;
+    top: 25px;
+    left: 380px;
+    z-index: 1200;
+    width: 40px;
+    height: 40px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ui-toggle::after {
+    content: '◀';
+    font-size: 0.8rem;
+    color: var(--text-main);
+    transition: transform 0.4s;
+}
+
+.ui-toggle.panel-hidden { left: 20px; }
+.ui-toggle.panel-hidden::after { transform: rotate(180deg); }
+
+/* Loader Styles */
+#map-loader {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2000;
+    background: rgba(0,0,0,0.9);
+    padding: 30px;
+    border-radius: 20px;
+    border: 1px solid var(--accent);
+    text-align: center;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.loader-text .main-text { display: block; font-weight: 700; }
+.loader-text .sub-text { font-size: 0.75rem; color: var(--text-dim); }
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255,255,255,0.1);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 1s infinite linear;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* 1. Target the sidebar specifically */
+.sidebar-content::-webkit-scrollbar {
+    width: 5px; /* Very thin */
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+    background: transparent; /* Hide the track */
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1); /* Ghostly white */
+    border-radius: 10px;
+    transition: background 0.3s;
+}
+
+.sidebar-content:hover::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.25); /* Slightly more visible on hover */
+}
+
+/* 2. Standard for Firefox */
+.sidebar-content {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
+}
+
+/* Keep sidebar scroll visible/usable on smaller monitors. */
+
+/* --- FIX: Dropdown Overflow --- */
+select {
+    background: #010409;
+    border: 1px solid var(--border);
+    color: white;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    transition: border-color 0.2s;
+    
+    /* These lines fix the "ugly fit" issue */
+    width: 100%;           /* Ensures it fills the row but doesn't exceed it */
+    max-width: 100%;       /* Prevents stretching the sidebar */
+    text-overflow: ellipsis; /* Adds '...' to long filenames */
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+/* --- FIX: UI Toggle Button Text --- */
+.ui-toggle {
+    position: absolute;
+    top: 25px;
+    left: 380px;
+    z-index: 1200;
+    
+    /* Style fix */
+    min-width: 40px;
+    height: 40px;
+    padding: 0 12px;
+    background: var(--bg-panel);
+    border: 1px solid var(--border);
+    color: var(--text-main);
+    border-radius: 10px;
+    backdrop-filter: blur(8px);
+    
+    /* Text/Icon alignment */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.2s;
+}
+
+.ui-toggle:hover {
+    background: rgba(48, 54, 61, 0.9);
+    border-color: var(--text-dim);
+}
+
+/* Logic for when panel is hidden */
+.sidebar.collapsed ~ #map-container .ui-toggle { 
+    left: 20px; 
+}
