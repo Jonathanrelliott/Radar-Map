@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Genlx Radar</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <main id="map-container">
+            <div id="map"></div>
+            
+            <button id="ui-toggle" class="ui-toggle">
+                <span class="icon"></span>
+            </button>
+
+            <div id="radar-legend" class="radar-legend">
+                <div class="legend-title">Reflectivity (dBZ)</div>
+                <div class="legend-bar"></div>
+                <div class="legend-labels">
+                    <span>0</span><span>20</span><span>40</span><span>60</span><span>80</span>
+                </div>
+            </div>
+        </main>
+
+        <aside class="sidebar">
+            <header class="sidebar-header">
+                <div class="brand">
+                    <div class="logo"></div>
+                    <h1>Genlx Radar <span>v1.0</span></h1>
+                </div>
+                <div id="status-light" class="status-tag">System Ready</div>
+            </header>
+
+            <div class="sidebar-content">
+                <section class="control-group">
+                    <h3 class="group-title">Live NOAA Link</h3>
+                    <div class="input-row">
+                        <input type="text" id="station-id" placeholder="KMKX" maxlength="4">
+                        <button id="pull-btn" class="action-btn">Download</button>
+                    </div>
+                </section>
+
+                <section class="control-group">
+                    <h3 class="group-title">Analysis Engine</h3>
+                    <div class="select-wrapper">
+                        <select id="product-select">
+                            <option value="N0Q">Base Reflectivity (High Res)</option>
+                            <option value="N0U">Base Velocity (Doppler)</option>
+                            <option value="N0C">Correlation Coeff (CC)</option>
+                        </select>
+                    </div>
+                    
+                    <label class="sub-label">Local File History</label>
+                    <div class="input-row">
+                        <select id="file-select">
+                            <option value="">Latest cached scan</option>
+                        </select>
+                        <button id="refresh-files-btn" class="icon-btn">↻</button>
+                    </div>
+                    <button id="load-btn" class="primary-btn">Analyze Selected Scan</button>
+                </section>
+
+                <section class="control-group">
+                    <h3 class="group-title">Layer Properties</h3>
+                    <div class="range-container">
+                        <div class="range-header">
+                            <span>Opacity</span>
+                            <span id="opacity-val">80%</span>
+                        </div>
+                        <input type="range" id="opacity-slider" min="0" max="1" step="0.1" value="0.8">
+                    </div>
+                    <button id="pin-btn" class="secondary-btn">Target My Location</button>
+                </section>
+
+                <section class="hazard-panel">
+                    <header class="panel-header">Hazard Detection</header>
+                    <div id="hazard-list">
+                        <p class="empty-msg">No active threats detected.</p>
+                    </div>
+                </section>
+            </div>
+
+            <footer class="sidebar-footer">
+                <div class="info-row">
+                    <span class="label">FILE:</span>
+                    <span id="file-info" class="value">No scan loaded</span>
+                </div>
+                <div class="info-row">
+                    <span class="label">SCAN TIME:</span>
+                    <span id="timestamp" class="value">--:--:--</span>
+                </div>
+            </footer>
+        </aside>
+
+        <div id="map-loader" class="hidden">
+            <div class="spinner"></div>
+            <div class="loader-text">
+                <span class="main-text">Processing Raw .ar2v</span>
+                <span class="sub-text">Calibrating sweeps...</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
